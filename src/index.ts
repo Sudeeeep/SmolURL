@@ -1,10 +1,9 @@
 import express from "express";
+import urlRouter from "./routes/url";
 
 const app = express();
 
-app.get("/", (_, res) => {
-  res.send("REQUEST SUCCESS");
-});
+app.use(urlRouter);
 
 app.listen(3000, () => {
   console.log("Server started");
