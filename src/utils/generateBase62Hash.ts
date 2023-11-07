@@ -10,7 +10,7 @@ export function generateBase62Hash(counter: number) {
   }
 
   while (hash.length < 7) {
-    hash += base62[Math.floor(Math.random() * 63)];
+    hash += base62[Math.floor(Math.random() * 62)];
   }
   return hash;
 }
