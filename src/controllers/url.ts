@@ -29,3 +29,17 @@ export const shortenUrl = async (req: Request, res: Response) => {
   }
   return res.json(DoctoAdd);
 };
+
+export const handleFavIcon = (_: Request, res: Response) => {
+  return res.status(404);
+};
+
+export const getLongUrl = async (req: Request, res: Response) => {
+  const shortUrlId = req.params.shortUrlId;
+
+  const requiredUrlData = await Urls.findOne({ shortUrlId });
+  if (!requiredUrlData) {
+    return res.status(400).json({ err: "Invalid Short URL ID" });
+  }
+  return res.redirect(301, requiredUrlData.longUrl);
+};
