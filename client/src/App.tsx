@@ -1,8 +1,10 @@
+import { Header } from "./components/Header";
+
 function App() {
   return (
-    <>
-      <h1 className="text-3xl">SmolURL</h1>
-    </>
+    <div className="container mx-auto px-4">
+      <Header />
+    </div>
   );
 }
 
