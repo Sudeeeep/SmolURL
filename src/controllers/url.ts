@@ -37,9 +37,14 @@ export const handleFavIcon = (_: Request, res: Response) => {
 export const getLongUrl = async (req: Request, res: Response) => {
   const shortUrlId = req.params.shortUrlId;
 
-  const requiredUrlData = await Urls.findOne({ shortUrlId });
+  const requiredUrlData = await Urls.findOneAndUpdate(
+    { shortUrlId },
+    { $inc: { clicks: 1 } }
+  );
+
   if (!requiredUrlData) {
     return res.status(400).json({ err: "Invalid Short URL ID" });
   }
+
   return res.redirect(301, requiredUrlData.longUrl);
 };
