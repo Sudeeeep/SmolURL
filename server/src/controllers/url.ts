@@ -1,11 +1,20 @@
 import { Request, Response } from "express";
 import { Urls } from "../models/url";
 import { generateBase62Hash } from "../utils/generateBase62Hash";
+import { isUrlValid } from "../utils/isUrlValid";
+import { checkProtocol } from "../utils/checkProtocol";
 
 export const shortenUrl = async (req: Request, res: Response) => {
-  const body = req.body;
-  if (!body.url) {
+  let url = req.body.url;
+  console.log(url);
+  if (!url) {
     return res.status(400).json({ error: "url is required" });
+  }
+
+  url = checkProtocol(url);
+
+  if (!isUrlValid(url)) {
+    return res.status(400).json({ error: "Invalid URL" });
   }
 
   const [lastAddedDoc] = await Urls.find({}, { counter: true }) // get the last added document
@@ -16,7 +25,7 @@ export const shortenUrl = async (req: Request, res: Response) => {
   const shortUrlId = generateBase62Hash(counter + 1);
   const DoctoAdd = new Urls({
     counter: counter + 1,
-    longUrl: body.url,
+    longUrl: url,
     shortUrlId,
   });
 
