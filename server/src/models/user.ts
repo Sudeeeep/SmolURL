@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+// @ts-ignore
+import uniqueValidaor from "mongoose-unique-validator";
 
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "email is required"],
+    unique: true,
   },
   password: {
     type: String,
@@ -17,6 +20,8 @@ const userSchema = new mongoose.Schema({
     },
   ],
 });
+
+userSchema.plugin(uniqueValidaor);
 
 userSchema.set("toJSON", {
   transform: (_, ret) => {
