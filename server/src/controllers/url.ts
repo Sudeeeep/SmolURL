@@ -27,6 +27,7 @@ export const shortenUrl = async (req: Request, res: Response) => {
     counter: counter + 1,
     longUrl: url,
     shortUrlId,
+    user: req.body.user,
   });
 
   try {
