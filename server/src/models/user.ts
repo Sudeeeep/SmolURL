@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 // @ts-ignore
-import uniqueValidaor from "mongoose-unique-validator";
+import uniqueValidator from "mongoose-unique-validator";
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-userSchema.plugin(uniqueValidaor);
+userSchema.plugin(uniqueValidator);
 
 userSchema.set("toJSON", {
   transform: (_, ret) => {
