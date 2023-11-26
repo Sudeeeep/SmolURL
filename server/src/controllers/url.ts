@@ -3,10 +3,11 @@ import { Urls } from "../models/url";
 import { generateBase62Hash } from "../utils/generateBase62Hash";
 import { isUrlValid } from "../utils/isUrlValid";
 import { checkProtocol } from "../utils/checkProtocol";
+import { User } from "../models/user";
 
 export const shortenUrl = async (req: Request, res: Response) => {
   let url = req.body.url;
-  console.log(url);
+
   if (!url) {
     return res.status(400).json({ error: "url is required" });
   }
@@ -23,21 +24,29 @@ export const shortenUrl = async (req: Request, res: Response) => {
 
   const counter = lastAddedDoc?.counter || 0; //get counter from last added document
   const shortUrlId = generateBase62Hash(counter + 1);
+
+  const user = await User.findById(req.body.user);
+
   const DoctoAdd = new Urls({
     counter: counter + 1,
     longUrl: url,
     shortUrlId,
-    user: req.body.user,
+    user: user?.id,
   });
 
+  let savedUrl;
   try {
-    await DoctoAdd.save();
+    savedUrl = await DoctoAdd.save();
+    if (user) {
+      user.urls = user.urls.concat(savedUrl.id);
+      await user.save();
+    }
   } catch (err) {
     if (err instanceof Error) {
       return res.status(400).json(err.message);
     }
   }
-  return res.json(DoctoAdd);
+  return res.json(savedUrl);
 };
 
 export const handleFavIcon = (_: Request, res: Response) => {
