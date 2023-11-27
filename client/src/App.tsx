@@ -1,11 +1,17 @@
-import { Body } from "./components/Body";
-import { Header } from "./components/Header";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Home } from "./components/Home";
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+  ]);
+
   return (
     <div className="container mx-auto px-4">
-      <Header />
-      <Body />
+      <RouterProvider router={router} />;
     </div>
   );
 }
