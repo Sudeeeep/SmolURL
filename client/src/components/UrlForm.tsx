@@ -1,4 +1,4 @@
-export const SmolUrl = () => {
+export const UrlForm = () => {
   return (
     <div className="flex flex-col gap-10 max-w-full min-[770px]:max-w-[80%] mx-auto mt-10 px-5 py-10 sm:px-16 rounded-lg border shadow-[0px_0px_4px_0px_rgb(141,137,137)]">
       <h1 className="text-3xl font-bold text-center">
