@@ -35,7 +35,10 @@ export const getUser = async (req: Request, res: Response) => {
 
   let user;
   try {
-    user = await User.findById(userId);
+    user = await User.find({}).populate(
+      "urls",
+      "longUrl shortUrlId clicks createdAt updatedAt"
+    );
   } catch (err) {
     return res.send(err);
   }
