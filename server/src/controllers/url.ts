@@ -4,9 +4,17 @@ import { generateBase62Hash } from "../utils/generateBase62Hash";
 import { isUrlValid } from "../utils/isUrlValid";
 import { checkProtocol } from "../utils/checkProtocol";
 import { User } from "../models/user";
+import jwt from "jsonwebtoken";
+
+interface JWTPayload {
+  id: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
 
 export const shortenUrl = async (req: Request, res: Response) => {
-  let url = req.body.url;
+  let { url, userType } = req.body;
 
   if (!url) {
     return res.status(400).json({ error: "url is required" });
@@ -25,18 +33,64 @@ export const shortenUrl = async (req: Request, res: Response) => {
   const counter = lastAddedDoc?.counter || 0; //get counter from last added document
   const shortUrlId = generateBase62Hash(counter + 1);
 
-  const user = await User.findById(req.body.user);
+  console.log(userType);
+
+  if (userType === "guest") {
+    const DoctoAdd = new Urls({
+      counter: counter + 1,
+      longUrl: url,
+      shortUrlId,
+    });
+
+    let savedUrl;
+    try {
+      savedUrl = await DoctoAdd.save();
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json(err.message);
+      }
+    }
+    return res.json(savedUrl);
+  }
+
+  let token;
+  const authorizationHeader = req.get("authorization");
+
+  console.log(authorizationHeader && authorizationHeader.startsWith("Bearer "));
+
+  authorizationHeader && authorizationHeader.startsWith("Bearer ")
+    ? (token = authorizationHeader.replace("Bearer ", ""))
+    : (token = null);
+
+  console.log(token);
+  if (!token) {
+    return res.status(401).json({ error: "token not found" });
+  }
+
+  let payload;
+  try {
+    payload = jwt.verify(token, process.env.SECRET_KEY as string) as JWTPayload;
+  } catch (err) {
+    console.log(err);
+    return res.status(401).json({ error: "token is not a valid JWT token" });
+  }
+
+  if (!payload.id) {
+    return res.status(401).json({ error: "invalid token" });
+  }
 
   const DoctoAdd = new Urls({
     counter: counter + 1,
     longUrl: url,
     shortUrlId,
-    user: user?.id,
+    user: payload.id,
   });
 
   let savedUrl;
   try {
     savedUrl = await DoctoAdd.save();
+    const user = await User.findById(payload.id);
+
     if (user) {
       user.urls = user.urls.concat(savedUrl.id);
       await user.save();
