@@ -1,5 +1,6 @@
 import express from "express";
 import "dotenv/config";
+import cors from "cors";
 import urlRouter from "./routes/url";
 import { connectDb } from "./services/connectDb";
 import userRouter from "./routes/user";
@@ -10,6 +11,7 @@ const app = express();
 
 connectDb();
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use(urlRouter);
