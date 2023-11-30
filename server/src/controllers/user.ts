@@ -9,6 +9,15 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "email or password is missing" });
   }
 
+  if (password.length < 5) {
+    return res
+      .status(400)
+      .json({
+        error: "PasswordValidation",
+        message: "Password should be at least 5 characters long",
+      });
+  }
+
   const passwordHash = await bcrypt.hash(password, 10);
 
   const user = new User({
@@ -20,7 +29,7 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     savedUser = await user.save();
   } catch (err) {
-    return res.json({ err: "Error occured when creating user" });
+    return res.status(400).json(err);
   }
 
   return res.status(201).json(savedUser);
