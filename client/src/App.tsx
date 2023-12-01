@@ -6,8 +6,11 @@ import { Login } from "./components/Login";
 import { SignUp } from "./components/SignUp";
 
 function App() {
+  const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
   const [urlData, setUrlData] = useState<UrlData | null>(null);
+
+  console.log(token);
 
   const router = createBrowserRouter([
     {
@@ -16,7 +19,7 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <Login setToken={setToken} />,
     },
     {
       path: "/signup",

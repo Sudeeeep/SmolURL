@@ -9,8 +9,7 @@ export interface UrlData {
 export interface UserData {
   id: string;
   email: string;
-  urlsL: UrlData[];
-  token: string;
+  urls: UrlData[];
 }
 
 export interface ErrorType {
