@@ -43,7 +43,7 @@ export const Home = ({
 
   return (
     <>
-      <Header user={user} />
+      <Header user={user} setUser={setUser} />
       <UrlForm
         token={token}
         setUser={setUser}
