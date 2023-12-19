@@ -4,11 +4,15 @@ import axios, { AxiosError } from "axios";
 import { Result } from "./Result";
 
 export const UrlForm = ({
+  token,
   user,
+  setUser,
   urlData,
   setUrlData,
 }: {
+  token: string | null;
   user: UserData | null;
+  setUser: React.Dispatch<React.SetStateAction<UserData | null>>;
   urlData: UrlData | null;
   setUrlData: React.Dispatch<React.SetStateAction<UrlData | null>>;
 }) => {

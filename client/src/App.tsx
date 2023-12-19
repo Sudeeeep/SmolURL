@@ -9,6 +9,7 @@ function App() {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
   const [urlData, setUrlData] = useState<UrlData | null>(null);
+  console.log(user);
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
@@ -23,7 +24,15 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home user={user} urlData={urlData} setUrlData={setUrlData} />,
+      element: (
+        <Home
+          token={token}
+          setUser={setUser}
+          user={user}
+          urlData={urlData}
+          setUrlData={setUrlData}
+        />
+      ),
     },
     {
       path: "/login",
