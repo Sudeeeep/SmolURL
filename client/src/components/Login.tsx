@@ -3,7 +3,7 @@ import { Header } from "./Header";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import axios, { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Login = ({
   setToken,
@@ -116,9 +116,12 @@ export const Login = ({
 
           <p>
             Don't have an account?
-            <span className="text-[#dd9323] hover:underline cursor-pointer">
+            <Link
+              to="/signup"
+              className="text-[#dd9323] hover:underline cursor-pointer"
+            >
               Sign up
-            </span>
+            </Link>
           </p>
         </form>
       </div>
