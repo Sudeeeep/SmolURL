@@ -43,7 +43,7 @@ export const Home = ({
 
   return (
     <>
-      <Header />
+      <Header user={user} />
       <UrlForm
         token={token}
         setUser={setUser}
@@ -51,7 +51,7 @@ export const Home = ({
         urlData={urlData}
         setUrlData={setUrlData}
       />
-      <CreateAccount />
+      {!user && <CreateAccount />}
     </>
   );
 };
